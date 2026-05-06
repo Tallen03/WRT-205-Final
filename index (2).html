@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hallucination Economy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --color-bg: #14181f;
+        --color-bg-alt: #1a1f29;
+        --color-text: #e8e2d5;
+        --color-text-muted: #a39d8e;
+        --color-accent: #d97757;
+        --color-accent-soft: rgba(217, 119, 87, 0.12);
+        --color-line: #2c3440;
+        --color-quote-bg: #1a1f29;
+        --max-width: 720px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.7;
+        font-size: 18px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* HERO */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 24px;
+        position: relative;
+        background: linear-gradient(180deg, #0f131a 0%, #1a1f29 100%);
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image:
+            radial-gradient(circle at 20% 30%, rgba(217, 119, 87, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(217, 119, 87, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .hero-inner {
+        max-width: 900px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-eyebrow {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: var(--color-accent);
+        font-weight: 600;
+        margin-bottom: 32px;
+    }
+
+    .hero h1 {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: clamp(2.6rem, 7vw, 5.5rem);
+        line-height: 1.02;
+        letter-spacing: -0.025em;
+        margin-bottom: 32px;
+        color: var(--color-text);
+    }
+
+    .hero h1 em {
+        font-style: italic;
+        color: var(--color-accent);
+        font-weight: 400;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1.15rem, 2vw, 1.4rem);
+        color: var(--color-text-muted);
+        font-weight: 300;
+        max-width: 620px;
+        margin: 0 auto 56px;
+        line-height: 1.55;
+    }
+
+    .hero-meta {
+        font-size: 12px;
+        color: var(--color-text-muted);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .hero-meta span {
+        margin: 0 12px;
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        animation: bounce 2.4s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+        50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+    }
+
+    /* CONTENT */
+    .content {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 80px 24px;
+    }
+
+    .section {
+        margin-bottom: 80px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .section-eyebrow {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        color: var(--color-accent);
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+
+    h2 {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        margin-bottom: 32px;
+        color: var(--color-text);
+    }
+
+    h2 em {
+        font-style: italic;
+        color: var(--color-accent);
+    }
+
+    p {
+        margin-bottom: 24px;
+        font-size: 1.05rem;
+        line-height: 1.78;
+        color: var(--color-text);
+    }
+
+    p a {
+        color: var(--color-accent);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(217, 119, 87, 0.4);
+        transition: border-color 0.2s, color 0.2s;
+    }
+
+    p a:hover {
+        border-bottom-color: var(--color-accent);
+        color: #e8916e;
+    }
+
+    /* PULL QUOTE */
+    .pullquote {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+        line-height: 1.4;
+        font-weight: 400;
+        font-style: italic;
+        color: var(--color-text);
+        padding: 48px 0;
+        margin: 48px 0;
+        border-top: 1px solid var(--color-line);
+        border-bottom: 1px solid var(--color-line);
+        text-align: center;
+    }
+
+    .pullquote em {
+        color: var(--color-accent);
+    }
+
+    .pullquote-attribution {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-style: normal;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        color: var(--color-text-muted);
+        margin-top: 24px;
+        font-weight: 500;
+    }
+
+    /* FEATURE IMAGES */
+    .feature-image {
+        margin: 56px 0;
+        position: relative;
+    }
+
+    .feature-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+        filter: brightness(0.85) contrast(1.05);
+    }
+
+    .feature-image-caption {
+        margin-top: 16px;
+        font-size: 13px;
+        color: var(--color-text-muted);
+        font-style: italic;
+        text-align: center;
+        line-height: 1.5;
+    }
+
+    /* FULL-WIDTH BREAKOUT IMAGE */
+    .breakout-image {
+        margin: 80px calc(-1 * (100vw - var(--max-width)) / 2 + 24px);
+        max-width: 100vw;
+    }
+
+    @media (max-width: 800px) {
+        .breakout-image {
+            margin: 60px -24px;
+        }
+    }
+
+    .breakout-image img {
+        width: 100%;
+        height: clamp(300px, 40vh, 500px);
+        object-fit: cover;
+        display: block;
+        filter: brightness(0.7) contrast(1.05);
+    }
+
+    /* STATS */
+    .stat-block {
+        background: var(--color-accent-soft);
+        border-left: 3px solid var(--color-accent);
+        padding: 48px 32px;
+        margin: 56px 0;
+        text-align: center;
+        border-radius: 2px;
+    }
+
+    .stat-number {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(3.5rem, 8vw, 5.5rem);
+        font-weight: 600;
+        line-height: 1;
+        color: var(--color-accent);
+        margin-bottom: 12px;
+        letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: var(--color-text);
+        max-width: 480px;
+        margin: 0 auto;
+        font-weight: 400;
+    }
+
+    .stat-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 32px;
+        margin: 56px 0;
+        padding: 48px 0;
+        border-top: 1px solid var(--color-line);
+        border-bottom: 1px solid var(--color-line);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-item .stat-number {
+        font-size: clamp(2.6rem, 5.5vw, 3.6rem);
+        margin-bottom: 8px;
+    }
+
+    .stat-item .stat-label {
+        font-size: 14px;
+        color: var(--color-text-muted);
+        line-height: 1.4;
+    }
+
+    /* SLIDE EMBED */
+    .slide-embed {
+        margin: 56px 0;
+    }
+
+    .slide-image {
+        width: 100%;
+        background: #0f131a;
+        border: 1px solid var(--color-line);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .slide-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .slide-caption {
+        margin-top: 16px;
+        font-size: 13px;
+        color: var(--color-text-muted);
+        font-style: italic;
+        text-align: center;
+        line-height: 1.5;
+    }
+
+    /* DROP CAP */
+    .drop-cap::first-letter {
+        font-family: 'Fraunces', serif;
+        font-size: 4.8rem;
+        font-weight: 600;
+        float: left;
+        line-height: 0.9;
+        margin: 8px 14px 0 0;
+        color: var(--color-accent);
+    }
+
+    /* SECTION DIVIDER */
+    .divider {
+        text-align: center;
+        margin: 80px 0;
+        font-family: 'Fraunces', serif;
+        color: var(--color-text-muted);
+        font-size: 24px;
+        letter-spacing: 16px;
+    }
+
+    /* WORKS CITED */
+    .works-cited {
+        background: var(--color-bg-alt);
+        padding: 80px 24px;
+        margin-top: 100px;
+        border-top: 1px solid var(--color-line);
+    }
+
+    .works-cited-inner {
+        max-width: var(--max-width);
+        margin: 0 auto;
+    }
+
+    .works-cited h2 {
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .works-cited ol {
+        list-style: none;
+        counter-reset: cite-counter;
+    }
+
+    .works-cited li {
+        counter-increment: cite-counter;
+        position: relative;
+        padding-left: 48px;
+        margin-bottom: 24px;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--color-text);
+    }
+
+    .works-cited li::before {
+        content: counter(cite-counter);
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-family: 'Fraunces', serif;
+        font-size: 18px;
+        color: var(--color-accent);
+        font-weight: 600;
+    }
+
+    .works-cited a {
+        color: var(--color-accent);
+        text-decoration: none;
+        word-break: break-word;
+    }
+
+    .works-cited a:hover {
+        text-decoration: underline;
+    }
+
+    .works-cited em {
+        color: var(--color-text-muted);
+    }
+
+    /* FOOTER */
+    .footer {
+        text-align: center;
+        padding: 48px 24px;
+        font-size: 12px;
+        color: var(--color-text-muted);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        background: var(--color-bg-alt);
+    }
+
+    @media (max-width: 600px) {
+        body { font-size: 16px; }
+        .content { padding: 60px 20px; }
+        .section { margin-bottom: 60px; }
+        .pullquote { padding: 36px 0; margin: 36px 0; }
+        .stat-block { padding: 36px 20px; }
+        .divider { letter-spacing: 12px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO SECTION ============ -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-eyebrow">An Opinion Essay on the State of AI</div>
+        <h1>The Hallucination<br><em>Economy</em></h1>
+        <p class="hero-subtitle">AI, engagement, and the death of verification. How current AI development optimizes for what feels right, not what is right.</p>
+        <div class="hero-meta">
+            <span>WRT 205</span>
+            <span>•</span>
+            <span>Final Essay</span>
+            <span>•</span>
+            <span>April 2026</span>
+        </div>
+    </div>
+    <div class="scroll-indicator">Scroll to begin ↓</div>
+</section>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="content">
+
+    <!-- ============ INTRODUCTION ============ -->
+    <section class="section">
+        <p class="drop-cap">By all metrics developers test for at OpenAI, ChatGPT succeeded at helping two New York lawyers make a legal brief in March of 2023. The chatbot responded quickly and provided polished, grammatically correct, confident-sounding work. It cited six relevant court cases with authoritative language and confident phrasing. The lawyers were satisfied; ChatGPT had given them the foundation for a strong case. There was just one issue: none of the cases referenced existed. The AI hallucinated judges, quotes, and precedents all out of thin air, and it had done so well enough to convince two lawyers, the people who had to defend the work in court, that it was all real. The result: two careers ended, $5,000 fines, and a respected judge saying they "abandoned their responsibilities" (<a href="https://www.cnbc.com/2023/06/22/judge-sanctions-lawyers-whose-ai-written-filing-contained-fake-citations.html" target="_blank">Breuninger</a>). But in the eyes of the AI and its testers, it did everything perfectly. It had optimized for engagement, user satisfaction, speed, and output, not for truth.</p>
+
+        <div class="feature-image">
+            <img src="https://images.unsplash.com/photo-1589216532372-1c2a367900d9?w=1200&q=80" alt="Law books and legal research materials representing traditional verification systems">
+            <div class="feature-image-caption">The lawyers in the Avianca case relied on ChatGPT instead of legal databases like Westlaw or LexisNexis. The AI produced six fabricated cases that looked indistinguishable from real ones.</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="pullquote">
+            Current AI systems are designed to maximize engagement, keep the user interacting and coming back, rather than ensuring accurate information.
+            <span class="pullquote-attribution">Thesis</span>
+        </div>
+
+        <p>This wasn't some one-off freak event. ChatGPT performed as designed: it generated text that sounds correct, authoritative, and engaging because that's all it is under the hood: an algorithm that based on a given input, outputs a string of words that is relevant and satisfying to the user. The lawyers trusted it because it seemed helpful, looked professional, and said everything with confidence. Current AI systems are designed to maximize engagement, keep the user interacting and coming back, rather than ensuring accurate information. This design philosophy shapes how AI is trained: models learn to predict what keeps users engaged, not what is correct. It drives business incentives; digital companies profit off of user engagement and subscriptions, not from being correct. This is caused by the technology industry ecosystem where engagement beats truth; any company that focuses on truth falls behind in the race. This isn't speculation, it's measurable. Research shows AI risks have doubled since 2022, yet deployment continues to accelerate because companies prioritize speed-to-market over comprehensive testing (Patel and Mulligan).</p>
+
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-number">78%</div>
+                <div class="stat-label">of organizations now use AI</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6%</div>
+                <div class="stat-label">qualify as "high performers"</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2x</div>
+                <div class="stat-label">more AI risks since 2022</div>
+            </div>
+        </div>
+
+        <p>A 2023 McKinsey survey found that 78% of organizations now use AI in some capacity, but only 6% qualify as "high performers" seeing measurable financial impact, suggesting companies adopt AI to appear innovative rather than to verify it works better than existing systems (Patel and Mulligan).</p>
+    </section>
+
+    <section class="section">
+        <p>This pattern isn't limited to AI or ChatGPT, it's the whole system. First, the way AI models are trained prioritizes user retention over being factually correct: systems learn to generate responses that feel helpful rather than responses that are fact-checked, because engagement is what gets measured and rewarded during development. Second, the business models funding AI development rewards metrics like clicks, time on platform, and subscription renewals, not accuracy. A user who stays engaged with a wrong answer generates more revenue than one who gets a correct answer and leaves. Third, even in high-stakes applications like finance, education, and medicine, where errors can cost careers or lives, deployment still favors speed and user satisfaction over verification. The result is a technological landscape where sounding right has become good enough rather than being correct, and most people cannot tell the difference anymore. The education sector shows this pattern clearly: 86% of students used AI during the 2024-2025 school year, yet educators report these tools encourage "neural laziness" where students bypass critical thinking in favor of instant, unverified answers (Britney and Emily). A 2023 <a href="https://www.pewresearch.org/short-reads/2023/08/28/growing-public-concern-about-the-role-of-artificial-intelligence-in-daily-life/" target="_blank">Pew Research</a> survey found that 58% of Americans report encountering AI-generated content that seemed authoritative and trustworthy, even when they couldn't verify its correctness, demonstrating how effectively AI mimics expertise (Pew Research Center).</p>
+
+        <!-- SLIDE 3 -->
+        <div class="slide-embed">
+            <div class="slide-image">
+                <img src="slide3_britney_emily.png" alt="Slide from Britney and Emily presentation showing AI Impacts on Student Learning including neural laziness and 86% student usage">
+            </div>
+            <div class="slide-caption">Britney and Emily, "AI &amp; Education," WRT 205 Presentation</div>
+        </div>
+    </section>
+
+    <div class="divider">— § —</div>
+
+    <!-- ============ BACKGROUND ============ -->
+    <section class="section">
+        <div class="section-eyebrow">Background</div>
+        <h2>What AI <em>actually</em> is</h2>
+
+        <p>To understand why AI prioritizes engagement over truth, you first need to understand what AI actually is. At the highest level, artificial intelligence is defined as "any machine-based system designed to perform tasks that would otherwise require human intelligence," such as pattern recognition, understanding language, making predictions, and generating content (<a href="https://www.nea.org/resource-library/artificial-intelligence-education" target="_blank">National Education Association</a>). But AI doesn't "think" or "know" anything. It calculates probabilities. Given an input, it predicts the most likely output based on patterns it learned from training data. For example, when you ask ChatGPT a question, it's not searching a database of facts, it's simply generating a sequence of words that statistically resembles how similar questions have been answered before (<a href="https://openai.com/index/chatgpt/" target="_blank">OpenAI</a>).</p>
+
+        <div class="feature-image">
+            <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=80" alt="Abstract neural network visualization representing how AI calculates probabilities rather than truth">
+            <div class="feature-image-caption">AI doesn't "know" anything. It calculates probabilities, predicting the most likely sequence of words based on patterns in its training data.</div>
+        </div>
+
+        <p>There are three main types of AI in use today. Reactive AI responds to specific inputs without learning from experience; think of a Roomba navigating around furniture. Predictive AI analyzes historical data to forecast future behavior, like when Netflix recommends shows based on what you've watched before. Generative AI, which is what most people think of when they hear "AI", can make new content by learning patterns from massive datasets of existing text, images, or code (Driscoll-Carignan). All three types share a common design goal: optimize what works. The problem with "what works" is it's defined by user behavior and profit, not factual accuracy. Even in professional settings, this creates problems: 83% of educators now use generative AI in the workplace, yet 71% received no professional training on how to verify its outputs or identify when it's wrong (Mitchell and Quezada). This design philosophy extends beyond AI into all algorithm based systems. YouTube's algorithm, for instance, prioritizes "watch time" over content accuracy, which is why conspiracy videos and misinformation often outperform factual educational content, they keep users watching longer (<a href="https://www.technologyreview.com/2019/09/27/132829/youtube-algorithm-gets-more-addictive/" target="_blank">MIT Technology Review</a>). Similarly, Facebook's newsfeed algorithm was found to amplify emotionally charged, divisive content because it generates more engagement than neutral, factual reporting (<a href="https://www.wsj.com/articles/facebook-knows-instagram-is-toxic-for-teen-girls-company-documents-show-11631620739" target="_blank">Wall Street Journal</a>). AI chatbots are simply the newest application of this engagement-first model. The pattern extends into high-stakes business applications as well. A 2025 McKinsey survey found that while 78% of organizations use AI, only 6% see meaningful financial returns, yet 64% claim AI is "enabling innovation" and 85% believe it will drive business model changes within three years (Patel and Mulligan). The disconnect reveals the truth: companies adopt AI for the appearance of innovation, engagement with stakeholders, media buzz, and investor confidence, rather than verified improvements in accuracy or outcomes.</p>
+    </section>
+
+    <section class="section">
+        <h2>How the training itself <em>rewards confidence over accuracy</em></h2>
+
+        <p>AI models are often trained using a process called reinforcement learning from human feedback, or RLHF (OpenAI). This process involves human evaluators who rate thousands of AI-generated responses. The model then uses those ratings to "learn" to produce outputs that earn high ratings. The issue with this is that high ratings don't mean correct. Most commonly, responses are rated to be harmless, helpful, and satisfying in that order. If it generates a confident answer, even a completely false one, users rate it higher. For example, imagine getting the response "I don't know" from an AI after asking it a question you need the answer to. Any user rating will give it a poor score because it doesn't seem helpful. If one model says "I don't know" and one gives you a detailed answer, it's clear which one users will use and which business will succeed. Research published in <em>Nature</em> demonstrates that this reinforcement learning process systematically biases AI models toward outputs that users prefer rather than outputs that are objectively correct, because evaluators unconsciously reward confident, well-formatted responses regardless of accuracy (<a href="https://doi.org/10.1038/s41586-023-06647-8" target="_blank">Rafailov et al.</a>).</p>
+
+        <div class="stat-block">
+            <div class="stat-number">17–33%</div>
+            <div class="stat-label">of legal AI queries about case law return hallucinated, plausible-but-false information (Stanford HAI)</div>
+        </div>
+
+        <p>The consequences are serious: legal AI systems hallucinate in 17-33% of case law queries according to <a href="https://hai.stanford.edu/news/hallucinating-law-legal-mistakes-large-language-models-are-pervasive" target="_blank">Stanford researchers</a> (Stanford HAI). Yet adoption continues because, as one education technology analyst noted, the traditional safeguards that ensured accuracy in textbooks, like peer review, editorial oversight, and correction processes, simply don't exist for generative AI (Mitchell and Quezada). Therefore, this training system teaches the model that confidence beats accuracy. Once you understand how the tech is built, the pattern becomes much more clear: engagement isn't just one of many design goals, it is the number one priority, because it has to be for a business to compete.</p>
+    </section>
+
+    <div class="divider">— § —</div>
+
+    <!-- ============ ARGUMENT 1 ============ -->
+    <section class="section">
+        <div class="section-eyebrow">Argument I</div>
+        <h2>The textbook had a process. <em>AI doesn't.</em></h2>
+
+        <p class="drop-cap">Comparing AI to textbooks reveals how far we've drifted from truth-centered systems. As education technology analyst Jim Chilton noted in 2025, traditional textbooks were "built on accuracy and they have peer reviews, facts reviews, even when they're being purchased, they get reviewed yet again. And when there is something discovered that may be wrong with a textbook, there's a process to get it corrected. And today with generative AI, that doesn't exist" (Mitchell and Quezada).</p>
+
+        <!-- SLIDE 1 -->
+        <div class="slide-embed">
+            <div class="slide-image">
+                <img src="slide1_mitchell_quezada.png" alt="Slide from Mitchell and Quezada presentation showing Jim Chilton quotes about traditional textbooks vs. generative AI">
+            </div>
+            <div class="slide-caption">Mitchell and Quezada, "Artificial Intelligence and Education," WRT 205 Presentation</div>
+        </div>
+
+        <p>This wasn't an accident. Textbooks had slow, expensive verification processes because truth was the entire point. Publishers and academic reviewers took their role seriously because students would rely on the information for years. The system was designed from a simple understanding: if it's going to teach millions for years to come, it needs to be fully correct. Generative AI replaced that model with something different. Instead of verification processes, AI trained off of data scraped from the internet. This is the only way to collect enough data to fully train a model. Instead of editor oversight, AI uses pattern recognition. Instead of correction processes, AI has version updates that only prevent the error from happening in the next version. There is no public accountability for AI models. It used to take years to produce textbooks and that has now been replaced by a system that produces confident sounding text in seconds. Truth checking didn't survive the AI revolution because it was too slow, expensive, and hurts user experience.</p>
+    </section>
+
+    <section class="section">
+        <h2>The <em>GenAI Divide:</em> when the worse tool wins</h2>
+
+        <p>This trade-off becomes visible when you compare how different types of AI perform in professional settings. MIT researchers studying enterprise AI adoption found a troubling pattern they called the "GenAI Divide": over 40% of knowledge workers now use AI tools personally and report real productivity gains, yet those same workers describe their company's enterprise AI tools as unreliable and underwhelming (Patel and Mulligan).</p>
+
+        <!-- SLIDE 2 -->
+        <div class="slide-embed">
+            <div class="slide-image">
+                <img src="slide2_patel_mulligan.png" alt="Slide from Patel and Mulligan presentation showing The GenAI Divide: Why Enterprise AI Keeps Stalling">
+            </div>
+            <div class="slide-caption">Patel and Mulligan, "AI in Business," WRT 205 Presentation</div>
+        </div>
+
+        <p>Why the difference? Personal AI tools like ChatGPT are optimized to feel helpful. They respond instantly, use confident language, format everything professionally, and rarely say "I don't know." Enterprise AI systems, built to higher accuracy standards and subject to more rigorous testing, feel clunky and frustrating. They're slower and much more cautious. From a truth standpoint, enterprise AI is often more reliable. From an engagement standpoint, it loses badly. Workers know what good AI feels like now, and they've learned that "good" means fast, confident, and frictionless, not necessarily accurate. This creates what MIT calls "shadow usage," where employees bypass official tools entirely and use consumer AI instead, even when it produces worse results, because the experience is better.</p>
+
+        <div class="pullquote">
+            The market has spoken: users want tools that <em>sound</em> right, not tools that <em>are</em> right.
+        </div>
+
+        <p>Companies tolerate this because the error rates, while significant, aren't high enough to drive users away. <a href="https://hai.stanford.edu/news/hallucinating-law-legal-mistakes-large-language-models-are-pervasive" target="_blank">Stanford researchers</a> found that legal AI systems hallucinate, generating plausible but completely false information, in approximately 17-33% of queries involving case law (Stanford HAI). That's about one wrong answer in every three to six interactions. In any other high-stakes field, that failure rate would be unacceptable. Imagine a bridge that collapses 20% of the time, or a medication that works correctly only 75% of the time. But for AI chatbots, this is considered "good enough" because most users don't notice. They can't verify the output anyway, and the answers sound authoritative, so they trust them and move on. Fixing hallucinations would require building massive verification infrastructure, slowing down response times, and having the AI admit uncertainty more often, all of which hurt engagement. Users rate "I don't know" responses poorly. They switch to competitors who give them confident answers, even wrong ones. So <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank">AI companies</a> ship models they know are unreliable, because the alternative is losing users to competitors who do the same thing. The training system has taught everyone involved, developers and users alike, that confidence beats accuracy. Engagement is the metric that matters.</p>
+    </section>
+
+    <div class="divider">— § —</div>
+
+    <!-- ============ ARGUMENT 2 ============ -->
+    <section class="section">
+        <div class="section-eyebrow">Argument II</div>
+        <h2>The same playbook in <em>every domain</em></h2>
+
+        <p class="drop-cap">This engagement-over-truth dynamic isn't just a technical quirk of how AI gets trained. It's reinforced at every level by the business models that fund AI development. Companies don't make money from being accurate. They make money from keeping users engaged, and the incentive structure shapes everything about how AI gets deployed. This is most clear in advertising, where AI's entire purpose is manipulation. As one business presentation noted, "AI's ability to analyze a lot of data quickly makes it a great tool for advertisers. Much of the data such as the websites you look at, the things you buy, or your location are collected without your knowledge and used to cater advertisements to you" (Farias and Hagan).</p>
+
+        <div class="feature-image">
+            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&q=80" alt="Person using phone with social media notifications representing algorithmic engagement targeting">
+            <div class="feature-image-caption">Algorithmic recommendation systems, from social media to AI chatbots, share the same design philosophy: maximize engagement at any cost.</div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="slide-embed">
+            <div class="slide-image">
+                <img src="slide4_farias_hagan.png" alt="Slide from Farias and Hagan presentation showing Advertising Concerns and AI Biases">
+            </div>
+            <div class="slide-caption">Farias and Hagan, "Artificial Intelligence in Business," WRT 205 Presentation</div>
+        </div>
+
+        <p>This isn't about showing you truthful information about products. It's about showing you whatever keeps you clicking. If a misleading ad performs better than an honest one, the algorithm promotes the misleading ad. The optimization function has no concept of honesty or accuracy. It only measures conversion rates, click-through percentages, and time spent viewing. An ad that lies but gets results will always outperform an ad that tells the truth but bores the user. The same presentation highlighted how this creates serious problems with AI bias: when algorithms learn from biased data sets without monitoring, they perpetuate discrimination in hiring processes, pricing algorithms, and risk assessments (Farias and Hagan). But companies deploy these systems anyway because they're efficient and they keep users engaged with the platform, even if the decisions they make are wrong or unfair.</p>
+    </section>
+
+    <section class="section">
+        <h2>Even in finance, <em>speed beats certainty</em></h2>
+
+        <p>This pattern extends into high-stakes applications where you'd expect accuracy to matter more. In finance, AI is widely used for <a href="https://www.ibm.com/think/topics/ai-fraud-detection-in-banking" target="_blank">fraud detection and risk management</a>, analyzing transaction patterns to flag suspicious activity in real time (Monroe and Taras).</p>
+
+        <!-- SLIDE 5 -->
+        <div class="slide-embed">
+            <div class="slide-image">
+                <img src="slide5_monroe_taras.png" alt="Slide from Monroe and Taras presentation showing Fraud Detection and Risk Management in finance AI">
+            </div>
+            <div class="slide-caption">Monroe and Taras, "AI and Business," WRT 205 Presentation</div>
+        </div>
+
+        <p>On the surface, this sounds like a truth-seeking application: identify actual fraud, protect customers from real threats. But the implementation reveals the same engagement-first philosophy. Fraud detection AI is optimized for speed and frictionless user experience, not for thorough investigation. The algorithm sees an unusual transaction, flags it immediately, and blocks the payment. False positives, where legitimate purchases get flagged as fraud, are common and accepted as the cost of doing business. False negatives, where actual fraud slips through, also happen regularly. But banks tolerate both because the alternative, rigorous human review of every flagged transaction, would slow everything down and frustrate customers. The goal isn't perfect accuracy. The goal is keeping money moving and customers satisfied. Users want their transactions to process instantly, and they'll tolerate the occasional false fraud alert as long as the overall experience stays smooth. Certainty, in the form of careful verification, gets sacrificed for engagement in the form of speed and convenience.</p>
+    </section>
+
+    <section class="section">
+        <h2>And in education, <em>nobody is measuring whether it works</em></h2>
+
+        <p>The same dynamics play out in education, which we've already seen with the 86% student usage rate and neural laziness problem (Britney and Emily). Schools adopt AI tutoring systems and grading tools not because they've verified these systems improve learning outcomes, but because they look innovative and students like using them. The 71% of teachers who received no AI training are still using these tools in their classrooms (Mitchell and Quezada). Nobody's measuring whether students are learning better or developing stronger critical thinking skills. The metrics that matter are adoption rates, user satisfaction surveys, and whether the technology makes the school look forward-thinking. This is engagement optimization applied to institutional decision-making: deploy the tool that generates excitement and parent approval, not the tool that's been proven to work.</p>
+
+        <!-- SLIDE 6 -->
+        <div class="slide-embed">
+            <div class="slide-image">
+                <img src="slide6_driscoll_carignan.png" alt="Slide from Driscoll-Carignan presentation listing AI drawbacks: bias, data security, over-reliance, inequality, slow policy">
+            </div>
+            <div class="slide-caption">Driscoll-Carignan, "AI and Education," WRT 205 Presentation</div>
+        </div>
+
+        <p>What ties all of these domains together, advertising, finance, and education, is a consistent incentive structure. Companies that slow down to verify their AI outputs lose market share to competitors who ship faster and fix problems later, if ever. Users reward speed and confidence, not accuracy and caution. Investors fund growth and adoption metrics, not truth and verification processes. The result is an entire technological ecosystem where engagement isn't just one priority among many. It's the only priority that determines whether a company survives. Being right doesn't matter if nobody's using your product. Sounding right while keeping users engaged is what wins.</p>
+    </section>
+
+    <div class="divider">— § —</div>
+
+    <!-- ============ CONCLUSION ============ -->
+    <section class="section">
+        <div class="section-eyebrow">Conclusion</div>
+        <h2>What we built, and what we <em>forgot</em></h2>
+
+        <p class="drop-cap">AI's fundamental design philosophy, maximize engagement and minimize friction, has made truth optional across every domain where these systems get deployed. From legal research to education to financial services, the pattern holds: systems that sound authoritative win, whether or not they're actually correct. This isn't accidental or fixable with minor adjustments. It's structural. It's baked into how AI models are trained, where reinforcement learning rewards confident responses over accurate ones because users punish uncertainty. It's reinforced by business incentives that profit from clicks, subscriptions, and time on platform, not from being right. And it governs deployment decisions across advertising, finance, and education, where speed to market and user satisfaction consistently beat rigorous verification. The technological ecosystem rewards engagement at every level, and companies optimizing for truth can't compete.</p>
+
+        <div class="feature-image">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80" alt="Code on a screen representing the underlying systems that power AI and prioritize engagement metrics">
+            <div class="feature-image-caption">The systems that power AI are designed around metrics. The metrics measure engagement. Truth was never part of the equation.</div>
+        </div>
+
+        <p>The cost is already visible and growing. Students are outsourcing critical thinking to tools that don't actually think, they pattern match. Lawyers are citing cases that never existed. Professionals across every field are making decisions based on AI-generated analysis that sounds authoritative but might be completely fabricated. And most people can't tell the difference anymore because AI has gotten so good at mimicking expertise. We're building a world where "sounds right" and "is right" have become functionally identical in practice, and the ability to distinguish between them is disappearing with each generation that grows up trusting these systems.</p>
+
+        <p>The question isn't whether AI will keep growing. It will. The question is whether we'll demand systems that prioritize truth, or continue rewarding systems that simply keep us engaged. Right now, engagement is winning. Unless we redesign the incentive structures through <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report/responsible-ai" target="_blank">regulation requiring accuracy benchmarks</a>, transparency about error rates, or collective user demand for verification over convenience, AI will keep optimizing for the wrong metric. The technology can be steered toward truth. But that requires acknowledging that right now, it isn't.</p>
+
+        <div class="pullquote">
+            We built AI to give us answers.<br>
+            We forgot to make it care whether those answers were <em>true.</em>
+        </div>
+    </section>
+
+</div>
+
+<!-- ============ WORKS CITED ============ -->
+<section class="works-cited">
+    <div class="works-cited-inner">
+        <div class="section-eyebrow" style="text-align:center;">References</div>
+        <h2>Works Cited</h2>
+
+        <ol>
+            <li>Breuninger, Kevin. "Judge Sanctions Lawyers Whose AI-Written Filing Contained Fake Citations." <em>CNBC</em>, 22 June 2023, <a href="https://www.cnbc.com/2023/06/22/judge-sanctions-lawyers-whose-ai-written-filing-contained-fake-citations.html" target="_blank">cnbc.com/2023/06/22/judge-sanctions-lawyers-whose-ai-written-filing-contained-fake-citations.html</a>.</li>
+
+            <li>"Growing Public Concern About the Role of Artificial Intelligence in Daily Life." <em>Pew Research Center</em>, 28 Aug. 2023, <a href="https://www.pewresearch.org/short-reads/2023/08/28/growing-public-concern-about-the-role-of-artificial-intelligence-in-daily-life/" target="_blank">pewresearch.org/short-reads/2023/08/28/growing-public-concern-about-the-role-of-artificial-intelligence-in-daily-life</a>.</li>
+
+            <li>"III. The Current State of Artificial Intelligence in Education." <em>National Education Association</em>, <a href="https://www.nea.org/resource-library/artificial-intelligence-education" target="_blank">nea.org/resource-library/artificial-intelligence-education</a>.</li>
+
+            <li>"ChatGPT: Optimizing Language Models for Dialogue." <em>OpenAI</em>, <a href="https://openai.com/index/chatgpt/" target="_blank">openai.com/index/chatgpt</a>.</li>
+
+            <li>Hao, Karen. "YouTube Is Experimenting with Ways to Make Its Algorithm Even More Addictive." <em>MIT Technology Review</em>, 27 Sept. 2019, <a href="https://www.technologyreview.com/2019/09/27/132829/youtube-algorithm-gets-more-addictive/" target="_blank">technologyreview.com/2019/09/27/132829/youtube-algorithm-gets-more-addictive</a>.</li>
+
+            <li>Wells, Georgia, et al. "Facebook Knows Instagram Is Toxic for Teen Girls, Company Documents Show." <em>The Wall Street Journal</em>, 14 Sept. 2021, <a href="https://www.wsj.com/articles/facebook-knows-instagram-is-toxic-for-teen-girls-company-documents-show-11631620739" target="_blank">wsj.com/articles/facebook-knows-instagram-is-toxic-for-teen-girls-company-documents-show-11631620739</a>.</li>
+
+            <li>Rafailov, Rafael, et al. "Direct Preference Optimization: Your Language Model Is Secretly a Reward Model." <em>Nature</em>, vol. 624, 2023, <a href="https://doi.org/10.1038/s41586-023-06647-8" target="_blank">doi.org/10.1038/s41586-023-06647-8</a>.</li>
+
+            <li>Nay, John, et al. "Hallucinating Law: Legal Mistakes with Large Language Models Are Pervasive." <em>Stanford HAI</em>, <a href="https://hai.stanford.edu/news/hallucinating-law-legal-mistakes-large-language-models-are-pervasive" target="_blank">hai.stanford.edu/news/hallucinating-law-legal-mistakes-large-language-models-are-pervasive</a>.</li>
+
+            <li>"The State of AI in 2025: Agents, Innovation, and Transformation." <em>McKinsey &amp; Company</em>, 5 Nov. 2025, <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank">mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai</a>.</li>
+
+            <li>"AI Fraud Detection in Banking." <em>IBM</em>, <a href="https://www.ibm.com/think/topics/ai-fraud-detection-in-banking" target="_blank">ibm.com/think/topics/ai-fraud-detection-in-banking</a>.</li>
+
+            <li>"Responsible AI." <em>The 2026 AI Index Report</em>, Stanford HAI, <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report/responsible-ai" target="_blank">hai.stanford.edu/ai-index/2026-ai-index-report/responsible-ai</a>.</li>
+
+            <li>Patel, Sammy, and Declan Mulligan. "AI in Business." <em>WRT 205 Presentation</em>.</li>
+
+            <li>Mitchell, Chloe, and Sophia Quezada. "Artificial Intelligence and Education." <em>WRT 205 Presentation</em>.</li>
+
+            <li>Driscoll-Carignan, Hannah. "AI and Education." <em>WRT 205 Presentation</em>.</li>
+
+            <li>Britney, and Emily. "AI &amp; Education." <em>WRT 205 Presentation</em>.</li>
+
+            <li>Farias, Jordan, and Jacob Hagan. "Artificial Intelligence in Business." <em>WRT 205 Presentation</em>.</li>
+
+            <li>Monroe, Will, and David Taras. "AI and Business." <em>WRT 205 Presentation</em>.</li>
+        </ol>
+    </div>
+</section>
+
+<footer class="footer">
+    Thomas — WRT 205 Final Essay — Spring 2026
+</footer>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+    });
+</script>
+
+</body>
+</html>
